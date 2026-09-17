@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DiskLens — theme exploration</title>
+<link rel="stylesheet" href="/static/theme.css">
+<script src="/static/theme.js"></script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='13' fill='none' stroke='%234c8dff' stroke-width='3'/><circle cx='16' cy='16' r='5' fill='%234c8dff'/></svg>">
+<style>
+:root {
+  --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 14px; }
+
+header {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 22px;
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+h1 { margin: 0; font-size: 17px; font-weight: 700; letter-spacing: -.02em; }
+.sub { color: var(--text-2); font-size: 13px; }
+.spacer { flex: 1 1 auto; }
+.seg { display: inline-flex; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 2px; }
+.seg button { background: none; border: 0; padding: 6px 11px; border-radius: 6px; color: var(--text-2); font-size: 12.5px; font-weight: 600; cursor: pointer; }
+.seg button:hover { color: var(--text); }
+.seg button.on { background: var(--surface-3); color: var(--text); }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 13px; border-radius: 8px; cursor: pointer;
+  background: var(--surface-2); border: 1px solid var(--border); color: var(--text);
+  font-weight: 600; font-size: 12.5px; text-decoration: none;
+}
+.btn:hover { background: var(--surface-3); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+main { padding: 22px; }
+.intro { color: var(--text-2); max-width: 78ch; margin: 0 0 22px; line-height: 1.55; }
+.intro b { color: var(--text); }
+
+.grid { display: grid; gap: 22px; }
+/* One card per row. Two-up looked tidier but squeezed each app instance to
+ * about 400px, which is narrower than the app's own chrome. */
+.grid { grid-template-columns: 1fr; }
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.card-head {
+  display: flex; align-items: center; gap: 11px;
+  padding: 12px 15px; border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.card-head .nm { font-weight: 700; font-size: 14px; letter-spacing: -.01em; }
+.card-head .bl { color: var(--text-3); font-size: 12px; }
+.card-head .tag {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
+  padding: 2px 7px; border-radius: 20px; background: var(--surface-3); color: var(--text-2);
+}
+.frames { display: grid; grid-template-columns: 1fr 1fr; }
+.frame { position: relative; border-right: 1px solid var(--border); }
+.frame:last-child { border-right: 0; }
+.frame .lbl {
+  position: absolute; top: 9px; left: 9px; z-index: 3;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 20px;
+  background: var(--surface-3); color: var(--text-2);
+  pointer-events: none;
+}
+iframe { display: block; width: 100%; height: 560px; border: 0; background: var(--bg); }
+
+.pick {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 15px; border-top: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.pick .spacer { flex: 1 1 auto; }
+.pick .hint { color: var(--text-3); font-size: 12px; }
+
+.choice {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 16px 20px; margin-top: 26px;
+  border: 1px solid var(--border); border-radius: 12px; background: var(--surface);
+}
+.choice .t { font-weight: 700; }
+.choice .h { color: var(--text-2); font-size: 13px; }
+.chosen {
+  display: flex; align-items: center; gap: 9px;
+  padding: 10px 14px; border-radius: 10px;
+  background: var(--good-soft); border: 1px solid var(--good); color: var(--text);
+  font-weight: 600; font-size: 13px;
+}
+code { font-family: var(--mono); font-size: 12px; background: var(--surface-3); padding: 2px 6px; border-radius: 5px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>DiskLens themes</h1>
+  <span class="sub">Three directions, each with light and dark.</span>
+  <div class="spacer"></div>
+  <div class="seg" id="themeSeg"></div>
+  <div class="seg" id="modeSeg"></div>
+  <a class="btn" href="/app">Open the app</a>
+</header>
+
+<main>
+  <p class="intro">
+    Each panel below is the <b>real app</b>, not a picture of one — the same code you just
+    scanned your Mac with, embedded three times. Scroll and click inside them.
+    The switcher above changes this page; the buttons under each panel change that app
+    instance on its own.
+    <br><br>
+    What was wrong before: every surface sat within a few percent of every other one, so
+    the sidebar, panels and canvas all read as the same flat slab. Each direction below
+    separates them differently — <b>Instrument</b> with a crisp dark ladder and hairlines,
+    <b>Studio</b> with warm greys and soft depth, <b>Spectrum</b> with almost no chrome at all
+    so the file colours carry the screen.
+  </p>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="choice">
+    <div>
+      <div class="t">Made a choice?</div>
+      <div class="h">Pick one and I will make it the default, keep the other two available, and fold the same tokens into the landing page.</div>
+    </div>
+    <div class="spacer"></div>
+    <span class="hint" id="currentHint"></span>
+    <button class="btn primary" id="applyBtn">Use the theme I am viewing</button>
+  </div>
+</main>
+
+<script>
+const THEMES = [
+  { id: 'instrument', label: 'Instrument', blurb: 'Precise and technical. Tight, dense, one accent.', tag: 'technical' },
+  { id: 'studio',     label: 'Studio',     blurb: 'Soft and spacious. Warm neutrals, Mac-native feel.', tag: 'native' },
+  { id: 'spectrum',   label: 'Spectrum',   blurb: 'Chrome recedes, your data is the only colour.', tag: 'data-first' },
+];
+const MODES = ['light', 'dark'];
+
+const grid = document.getElementById('grid');
+
+function params(theme, mode) {
+  return `?theme=${theme}&mode=${mode}&embed=1`;
+}
+
+/* Load a preview only when it scrolls into view. Six apps booting at once
+ * exhausted the browser's per-host connection pool and left four of them
+ * spinning on "opening" forever. */
+const io = ('IntersectionObserver' in window)
+  ? new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting || e.target.src) return;
+        const f = e.target;
+        f.src = '/app' + params(f.dataset.theme, f.dataset.mode);
+        io.unobserve(f);
+      });
+    }, { rootMargin: '300px' })
+  : null;
+
+function setFrame(iframe, theme, mode) {
+  if (io) io.observe(iframe);
+  else iframe.src = '/app' + params(theme, mode);
+}
+
+THEMES.forEach((t) => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card-head">
+      <span class="nm">${t.label}</span>
+      <span class="bl">${t.blurb}</span>
+      <span class="spacer" style="flex:1"></span>
+      <span class="tag">${t.tag}</span>
+    </div>
+    <div class="frames">
+      ${MODES.map((m) => `
+        <div class="frame">
+          <span class="lbl">${m}</span>
+          <iframe data-theme="${t.id}" data-mode="${m}" title="${t.label} ${m}"></iframe>
+        </div>`).join('')}
+    </div>
+    <div class="pick">
+      <span class="hint">Prefer this one?</span>
+      <div class="spacer"></div>
+      <button class="btn" data-pick="${t.id}">Choose ${t.label}</button>
+    </div>`;
+  grid.appendChild(card);
+  card.querySelectorAll('iframe').forEach((f) => setFrame(f, f.dataset.theme, f.dataset.mode));
+  card.querySelector('[data-pick]').addEventListener('click', () => choose(t.id));
+});
+
+function buildSwitcher() {
+  const ts = document.getElementById('themeSeg');
+  const ms = document.getElementById('modeSeg');
+  ts.innerHTML = '';
+  THEMES.forEach((t) => {
+    const b = document.createElement('button');
+    b.textContent = t.label;
+    if (Theme.theme === t.id) b.className = 'on';
+    b.onclick = () => Theme.setTheme(t.id);
+    ts.appendChild(b);
+  });
+  ms.innerHTML = '';
+  Theme.MODES.forEach((m) => {
+    const b = document.createElement('button');
+    b.textContent = m.label;
+    if (Theme.mode === m.id) b.className = 'on';
+    b.onclick = () => Theme.setMode(m.id);
+    ms.appendChild(b);
+  });
+  document.getElementById('currentHint').textContent =
+    `Currently viewing: ${Theme.theme} · ${Theme.resolved}`;
+}
+
+function choose(id) {
+  const host = document.getElementById('grid');
+  host.querySelectorAll('.chosen')?.forEach((n) => n.remove());
+  const t = THEMES.find((x) => x.id === id);
+  const note = document.createElement('div');
+  note.className = 'chosen';
+  note.textContent = `${t.label} chosen — tell me and I will make it the default.`;
+  host.parentNode.insertBefore(note, document.querySelector('.choice'));
+  document.querySelector('p.intro').insertAdjacentElement('afterend', note);
+  fetch('/api/theme-choice', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ theme: id }),
+  }).catch(() => {});
+}
+
+document.getElementById('applyBtn').addEventListener('click', () => choose(Theme.theme));
+
+buildSwitcher();
+window.addEventListener('themechange', buildSwitcher);
+</script>
+</body>
+</html>

@@ -1,0 +1,265 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later
+ * Copyright (C) 2026 DiskLens contributors
+ */
+/* DiskLens theme system.
+ *
+ * Three directions, each with a light and a dark mode. Every colour, radius,
+ * shadow and density value in the app comes from a token defined here, so
+ * switching theme is one attribute on <html> and nothing else has to know.
+ *
+ *   <html data-theme="instrument|studio|spectrum" data-mode="light|dark">
+ *
+ * Script resolves "follow the system" before paint and writes data-mode, so
+ * the CSS never needs prefers-color-scheme duplication and there is no flash
+ * of the wrong mode.
+ *
+ * Token contract (every theme must define all of these):
+ *   surfaces  --bg --surface --surface-2 --surface-3 --overlay
+ *   lines     --border --border-soft
+ *   ink       --text --text-2 --text-3 --text-inv
+ *   accent    --accent --accent-hover --accent-ink --accent-soft
+ *   status    --good --good-soft --warn --warn-soft --danger --danger-soft
+ *   shape     --r-sm --r --r-lg --shadow-1 --shadow-2
+ *   density   --fs --pad --row-pad --gap
+ */
+
+/* ============================================================ Instrument
+ * Precise and technical. Near-monochrome with a single electric accent,
+ * hairline rules, tight radii, dense type. Layers are separated by real
+ * luminance steps rather than by decoration, which is what the old theme
+ * got wrong: everything sat within a few percent of everything else.
+ * ===================================================================== */
+
+[data-theme="instrument"] {
+  --bg: #06070a;
+  --surface: #121419;
+  --surface-2: #1b1f26;
+  --surface-3: #262c35;
+  --overlay: rgba(3, 4, 6, 0.74);
+
+  --border: #353d49;
+  --border-soft: #1f242c;
+
+  --text: #eef2f7;
+  --text-2: #97a3b2;
+  --text-3: #707d8d;
+  --text-inv: #06080c;
+
+  --accent: #4d8dff;
+  --accent-hover: #6ba0ff;
+  --accent-ink: #040d1c;
+  --accent-soft: rgba(77, 141, 255, 0.15);
+
+  --good: #35d39a;
+  --good-soft: rgba(53, 211, 154, 0.14);
+  --warn: #f5b544;
+  --warn-soft: rgba(245, 181, 68, 0.14);
+  --danger: #f87171;
+  --danger-soft: rgba(248, 113, 113, 0.15);
+
+  --r-sm: 3px;
+  --r: 6px;
+  --r-lg: 9px;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 16px 44px rgba(0, 0, 0, 0.6);
+
+  --fs: 12.5px;
+  --pad: 12px;
+  --row-pad: 5px 9px;
+  --gap: 10px;
+
+  --font-weight-head: 640;
+  color-scheme: dark;
+}
+
+[data-theme="instrument"][data-mode="light"] {
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --surface-2: #f2f4f7;
+  --surface-3: #e6e9ee;
+  --overlay: rgba(23, 28, 35, 0.32);
+
+  --border: #c9d0d9;
+  --border-soft: #e2e6ec;
+
+  --text: #0b1016;
+  --text-2: #56606c;
+  --text-3: #6d747e;
+  --text-inv: #ffffff;
+
+  --accent: #1a5fd0;
+  --accent-hover: #1550b5;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(31, 111, 235, 0.11);
+
+  --good: #12855f;
+  --good-soft: rgba(18, 133, 95, 0.11);
+  --warn: #a8690a;
+  --warn-soft: rgba(168, 105, 10, 0.12);
+  --danger: #c8393f;
+  --danger-soft: rgba(200, 57, 63, 0.1);
+
+  --shadow-1: 0 1px 2px rgba(16, 24, 40, 0.07);
+  --shadow-2: 0 18px 44px rgba(16, 24, 40, 0.16);
+  color-scheme: light;
+}
+
+/* ================================================================= Studio
+ * Soft and spacious, in the shape macOS itself uses. Warm neutral greys,
+ * generous radii, long shadows, roomier rows. Light mode is the intended
+ * home for this one and dark is the adaptation, not the reverse.
+ * ===================================================================== */
+
+[data-theme="studio"] {
+  --bg: #191919;
+  --surface: #262628;
+  --surface-2: #313133;
+  --surface-3: #3f3f42;
+  --overlay: rgba(0, 0, 0, 0.55);
+
+  --border: #46464a;
+  --border-soft: #333336;
+
+  --text: #f5f5f7;
+  --text-2: #a6a6ac;
+  --text-3: #86868c;
+  --text-inv: #1c1c1e;
+
+  --accent: #0a84ff;
+  --accent-hover: #3d9bff;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(10, 132, 255, 0.2);
+
+  --good: #30d158;
+  --good-soft: rgba(48, 209, 88, 0.16);
+  --warn: #ffd60a;
+  --warn-soft: rgba(255, 214, 10, 0.16);
+  --danger: #ff453a;
+  --danger-soft: rgba(255, 69, 58, 0.16);
+
+  --r-sm: 7px;
+  --r: 12px;
+  --r-lg: 16px;
+  --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-2: 0 22px 60px rgba(0, 0, 0, 0.5);
+
+  --fs: 13.5px;
+  --pad: 16px;
+  --row-pad: 8px 12px;
+  --gap: 12px;
+
+  --font-weight-head: 660;
+  color-scheme: dark;
+}
+
+[data-theme="studio"][data-mode="light"] {
+  --bg: #eeeef1;
+  --surface: #ffffff;
+  --surface-2: #f5f5f8;
+  --surface-3: #e7e7ec;
+  --overlay: rgba(0, 0, 0, 0.22);
+
+  --border: #d2d2d8;
+  --border-soft: #e2e2e8;
+
+  --text: #1c1c1e;
+  --text-2: #6c6c72;
+  --text-3: #6e6e76;
+  --text-inv: #ffffff;
+
+  --accent: #0063c6;
+  --accent-hover: #0056ad;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(0, 113, 227, 0.1);
+
+  --good: #1a8f3c;
+  --good-soft: rgba(26, 143, 60, 0.11);
+  --warn: #9a6b00;
+  --warn-soft: rgba(154, 107, 0, 0.12);
+  --danger: #d70015;
+  --danger-soft: rgba(215, 0, 21, 0.1);
+
+  --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-2: 0 24px 60px rgba(0, 0, 0, 0.18);
+  color-scheme: light;
+}
+
+/* =============================================================== Spectrum
+ * The data leads and the chrome gets out of the way. Surfaces are almost
+ * neutral and almost borderless; the only saturated colour on screen belongs
+ * to your files. Interactive elements are ink, not blue, so nothing competes
+ * with the map. Big numerals, lots of air.
+ * ===================================================================== */
+
+[data-theme="spectrum"] {
+  --bg: #0c0e11;
+  --surface: #16191e;
+  --surface-2: #1f232a;
+  --surface-3: #292e36;
+  --overlay: rgba(6, 8, 10, 0.7);
+
+  --border: #2e343d;
+  --border-soft: #20242b;
+
+  --text: #f2f5f9;
+  --text-2: #9aa5b1;
+  --text-3: #78828e;
+  --text-inv: #0e1013;
+
+  --accent: #f2f5f9;
+  --accent-hover: #ffffff;
+  --accent-ink: #0e1013;
+  --accent-soft: rgba(242, 245, 249, 0.1);
+
+  --good: #2fbf8f;
+  --good-soft: rgba(47, 191, 143, 0.13);
+  --warn: #e0a233;
+  --warn-soft: rgba(224, 162, 51, 0.13);
+  --danger: #ef6f6f;
+  --danger-soft: rgba(239, 111, 111, 0.14);
+
+  --r-sm: 4px;
+  --r: 9px;
+  --r-lg: 14px;
+  --shadow-1: none;
+  --shadow-2: 0 24px 64px rgba(0, 0, 0, 0.62);
+
+  --fs: 13px;
+  --pad: 18px;
+  --row-pad: 7px 10px;
+  --gap: 14px;
+
+  --font-weight-head: 700;
+  color-scheme: dark;
+}
+
+[data-theme="spectrum"][data-mode="light"] {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface-2: #f1f3f6;
+  --surface-3: #e5e8ed;
+  --overlay: rgba(20, 24, 29, 0.28);
+
+  --border: #ccd2da;
+  --border-soft: #e1e5ea;
+
+  --text: #12161b;
+  --text-2: #5b646e;
+  --text-3: #727a83;
+  --text-inv: #ffffff;
+
+  --accent: #12161b;
+  --accent-hover: #262c34;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(18, 22, 27, 0.07);
+
+  --good: #0f7a5a;
+  --good-soft: rgba(15, 122, 90, 0.1);
+  --warn: #96650a;
+  --warn-soft: rgba(150, 101, 10, 0.11);
+  --danger: #c24545;
+  --danger-soft: rgba(194, 69, 69, 0.1);
+
+  --shadow-2: 0 26px 64px rgba(20, 24, 29, 0.2);
+  color-scheme: light;
+}

@@ -1,0 +1,6 @@
+# Runtime data: saved scans, the staged cleanup queue, snapshots, the theme
+# choice, and the compiled Swift probe. None of it belongs in the repository.
+data/
+__pycache__/
+*.py[cod]
+.DS_Store
